@@ -1,13 +1,15 @@
 from fastapi import APIRouter, HTTPException
 from app.models.user import User, UserDB
-from app.services.user_service import create_user, get_user, get_all_users, update_user, delete_user
+from app.services.user_service import user_exists, create_user, get_user, get_all_users, update_user, delete_user
 
 router = APIRouter()
 
 @router.post("/users/", response_model=User)
 def create_user_endpoint(user: UserDB):
+    if user_exists(user.username):
+        raise HTTPException(status_code=400, detail="Username already exists")
     user_dict = create_user(user)
-    return {key: user_dict[key] for key in user_dict if key != "password"}
+    return user_dict
 
 @router.get("/users/{user_id}", response_model=User)
 def read_user_endpoint(user_id: str):

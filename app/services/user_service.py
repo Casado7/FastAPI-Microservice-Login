@@ -1,10 +1,14 @@
+from fastapi import HTTPException
 from app.models.user import UserDB
 from app.db.database import db
 from bson.objectid import ObjectId
 import bcrypt
 
+def user_exists(username: str) -> bool:
+    return db.users.find_one({"username": username}) is not None
+
 def create_user(user: UserDB):
-    user_dict = user.dict()
+    user_dict = user.model_dump()
     hashed_password = bcrypt.hashpw(user_dict["password"].encode('utf-8'), bcrypt.gensalt())
     user_dict["password"] = hashed_password
     result = db.users.insert_one(user_dict)
@@ -27,7 +31,7 @@ def get_all_users():
     return all_users
 
 def update_user(user_id: str, user: UserDB):
-    user_dict = user.dict()
+    user_dict = user.model_dump()
     if "password" in user_dict:
         user_dict["password"] = bcrypt.hashpw(user_dict["password"].encode('utf-8'), bcrypt.gensalt())
     update_result = db.users.update_one(
