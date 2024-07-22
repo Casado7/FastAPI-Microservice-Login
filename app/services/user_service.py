@@ -22,6 +22,13 @@ def get_user(user_id: str):
         return user
     return None
 
+def get_user_by_username(username: str):
+    user = db.users.find_one({"username": username})
+    if user:
+        user["_id"] = str(user["_id"])
+        return user
+    return None
+
 def get_all_users():
     users = db.users.find()
     all_users = []
