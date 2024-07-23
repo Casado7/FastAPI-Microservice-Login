@@ -1,5 +1,5 @@
 from fastapi import HTTPException
-from app.models.user import UserDB
+from app.models.user import UserDB, User
 from app.db.database import db
 from bson.objectid import ObjectId
 import bcrypt
@@ -26,7 +26,14 @@ def get_user_by_username(username: str):
     user = db.users.find_one({"username": username})
     if user:
         user["_id"] = str(user["_id"])
-        return user
+        return User(**user)
+    return None
+
+def get_userdb_by_username(username: str):
+    user = db.users.find_one({"username": username})
+    if user:
+        user["_id"] = str(user["_id"])
+        return UserDB(**user)
     return None
 
 def get_all_users():

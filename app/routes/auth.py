@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Depends, status
 from app.models.user import User, UserDB
 from app.db.database import db
-from app.services.user_service import user_exists, create_user, get_user,get_user_by_username, get_all_users, update_user, delete_user
+from app.services.user_service import user_exists, create_user, get_user,get_user_by_username, get_all_users, update_user, delete_user, get_userdb_by_username
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import bcrypt
 
@@ -19,19 +19,23 @@ async def current_user(token: str = Depends(oauth2)):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, 
                             detail="No estas autorizado",
                             headers={"WWW-Authenticate": "Bearer"})
+    if user.disabled:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, 
+                            detail="Usuario Desabilitado",
+                            headers={"WWW-Authenticate": "Bearer"})
     return user
 
 @router.post("/login")
 async def login(form: OAuth2PasswordRequestForm = Depends()):
     
-    user_db = get_user_by_username(form.username)
+    user_db = get_userdb_by_username(form.username)
     if not user_db:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="El usuario no existe")
     
-    if not bcrypt.checkpw(form.password.encode('utf-8'), user_db["password"]):
+    if not bcrypt.checkpw(form.password.encode('utf-8'), user_db.password.encode('utf-8')):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="La contraseña no es correcta")
     
-    return {"access_token":user_db["username"], "token_type":"bearer"}
+    return {"access_token":user_db.username, "token_type":"bearer"}
 
 @router.get("/me")
 async def me(user: User = Depends(current_user)):
