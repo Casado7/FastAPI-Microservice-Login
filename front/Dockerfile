@@ -1,20 +1,15 @@
-# Etapa 1: Construcción
-FROM node:16 as build
+# Dockerfile
+FROM node:16-alpine
 
 WORKDIR /app
 
-# Copiar package.json y package-lock.json si estás usando npm
+# Copiar package.json y package-lock.json
 COPY package.json package-lock.json ./
 RUN npm install
 
+# Copiar el resto de la aplicación
 COPY . .
-RUN npm run build
 
-# Etapa 2: Servidor Nginx
-FROM nginx:alpine
+EXPOSE 5173
 
-COPY --from=build /app/dist /usr/share/nginx/html
-
-EXPOSE 80
-
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "run", "dev"]
