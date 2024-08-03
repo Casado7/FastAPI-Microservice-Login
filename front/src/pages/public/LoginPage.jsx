@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { urls } from '../../constants/urls';
 import { useAxios } from '../../hooks/useAxios';
-import { Card, CardBody, CardHeader, Typography, Input, Button, Checkbox } from '@material-tailwind/react';
+import { Card, CardBody, CardHeader, Typography, Input, Button, Checkbox, CardFooter } from '@material-tailwind/react';
 
 const LoginPage = () => {
     const { fetchData, data, loading, error } = useAxios();
@@ -14,17 +14,17 @@ const LoginPage = () => {
 
     useEffect(() => {
         if (error) {
-            toast.error("Error al Iniciar Sesión")
+            toast.error(error.response.data.detail)
         } else {
             if (data && !loading) {
-                    toast.success('Inicio de Sesión Exitoso');
+                toast.success('Inicio de Sesión Exitoso');
             }
         }
-    }, [data, loading, error, ]);
+    }, [data, loading, error,]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const formData= new FormData();
+        const formData = new FormData();
         formData.append('username', user);
         formData.append('password', password);
         fetchData({
@@ -39,58 +39,52 @@ const LoginPage = () => {
 
 
     return (
-        <div>
-            <Card color="transparent" shadow={false} className="w-full max-w-md">
-                <Typography variant="h4" color="white" className="text-center">
-                    Login
-                </Typography>
-                <Typography color="gray" className="mt-1 font-normal text-center">
-                    Welcome back! Please enter your details.
-                </Typography>
-                <form className="mt-8 mb-2" onSubmit={handleSubmit}>
-                    <div className="mb-4 flex flex-col gap-6">
-                        <Typography variant="h6" color="white" className="-mb-3">
-                            User
-                        </Typography>
-                        <Input
-                            size="lg"
-                            placeholder="User"
-                            className=" !border-t-gray-700 focus:!border-t-gray-300 text-white"
-                            labelProps={{
-                                className: "before:content-none after:content-none",
-                            }}
-                            value={user}
-                            onChange={handleUserChange}
-                            required
-                        />
-                        <Typography variant="h6" color="white" className="-mb-3">
-                            Password
-                        </Typography>
-                        <Input
-                            type="password"
-                            size="lg"
-                            placeholder="********"
-                            className=" !border-t-gray-700 focus:!border-t-gray-300 text-white"
-                            labelProps={{
-                                className: "before:content-none after:content-none",
-                            }}
-                            value={password}
-                            onChange={handlePasswordChange}
-                            required
-                        />
-                    </div>
-                    <Button color="blue-gray" className="mt-6" fullWidth type="submit" disabled={loading}>
-                        {loading ? 'Loading...' : 'Login'}
-                    </Button>
-                    <Typography color="gray" className="mt-4 text-center font-normal">
-                        Don&apos;t have an account?{" "}
-                        <a href="#" className="font-medium text-white">
-                            Sign Up
+        <div className="flex justify-center" >
+            <Card className="w-96 shadow-lg rounded-lg overflow-hidden border" >
+                <CardHeader floated={false} shadow={false} className="text-center">
+                    <Typography variant="h4" color="black" className="text-center">
+                        Iniciar Sesión
+                    </Typography>
+                    <Typography color="gray-700" className="mt-1 font-normal text-center">
+                        Por favor ingresa tus datos.
+                    </Typography>
+                </CardHeader>
+                <CardBody className="bg-white p-6">
+                    <form onSubmit={handleSubmit}>
+                        <div className="mt-4 mb-4 flex flex-col gap-6">
+                            <Input
+                                label="Usuario"
+                                size="lg"
+                                value={user}
+                                onChange={handleUserChange}
+                                required
+                            />
+                            <Input
+                                type="password"
+                                label="Contraseña"
+                                size="lg"                                value={password}
+                                onChange={handlePasswordChange}
+                                required
+                            />
+                        </div>
+                        <Button color="light-blue" className="mt-6 w-full" type="submit" disabled={loading}>
+                            {loading ? 'Cargando...' : 'Iniciar Sesión'}
+                        </Button>
+                    </form>
+                </CardBody>
+                <CardFooter className="bg-white">
+                    <Typography color="gray-700" className="mt-1 text-center font-normal">
+                        ¿No tienes una cuenta?{" "}
+                        <a href="#" className="font-medium text-blue-500">
+                            Regístrate
                         </a>
                     </Typography>
-                </form>
+                </CardFooter>
             </Card>
         </div>
+
+
+
     );
 };
 
