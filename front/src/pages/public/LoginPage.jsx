@@ -45,7 +45,7 @@ const LoginPage = () => {
                     <Typography variant="h4" color="black" className="text-center">
                         Iniciar Sesión
                     </Typography>
-                    <Typography color="gray-700" className="mt-1 font-normal text-center">
+                    <Typography className="mt-1 font-normal text-center">
                         Por favor ingresa tus datos.
                     </Typography>
                 </CardHeader>
@@ -73,7 +73,7 @@ const LoginPage = () => {
                     </form>
                 </CardBody>
                 <CardFooter className="bg-white">
-                    <Typography color="gray-700" className="mt-1 text-center font-normal">
+                    <Typography className="mt-1 text-center font-normal">
                         ¿No tienes una cuenta?{" "}
                         <a href="#" className="font-medium text-blue-500">
                             Regístrate
@@ -82,9 +82,6 @@ const LoginPage = () => {
                 </CardFooter>
             </Card>
         </div>
-
-
-
     );
 };
 
