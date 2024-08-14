@@ -49,10 +49,6 @@ export default function ComplexNavbar() {
         >
           <Bars2Icon className="h-6 w-6" />
         </IconButton>
-
-        <Button size="sm" variant="text">
-          <span>Log In</span>
-        </Button>
         <ProfileMenu />
       </div>
       <MobileNav open={isNavOpen} className="overflow-scroll">
