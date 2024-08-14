@@ -9,36 +9,32 @@ import {
   CodeBracketSquareIcon,
 } from "@heroicons/react/24/solid";
 import NavListMenu from "./NavListMenu";
+import { useNavigate } from "react-router-dom";
 
 
 // Nav list component
 
 export default function NavList() {
+  const navigate = useNavigate();
     const navListItems = [
         {
-          label: "Account",
+          label: "Users",
           icon: UserCircleIcon,
-        },
-        {
-          label: "Blocks",
-          icon: CubeTransparentIcon,
-        },
-        {
-          label: "Docs",
-          icon: CodeBracketSquareIcon,
+          onClick: () => {
+            navigate("/list_users");
+          },
         },
       ];
       
   return (
     <ul className="mt-2 mb-4 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center">
       <NavListMenu />
-      {navListItems.map(({ label, icon }, key) => (
+      {navListItems.map(({ label, icon, onClick }, key) => (
         <Typography
           key={label}
-          as="a"
-          href="#"
           variant="small"
           color="gray"
+          onClick={onClick}
           className="font-medium text-blue-gray-500"
         >
           <MenuItem className="flex items-center gap-2 lg:rounded-full">
