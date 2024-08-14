@@ -3,11 +3,15 @@ import { toast } from 'react-hot-toast';
 import { urls } from '../../constants/urls';
 import { useAxios } from '../../hooks/useAxios';
 import { Card, CardBody, CardHeader, Typography, Input, Button, Checkbox, CardFooter } from '@material-tailwind/react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../auth/AuthContext';
 
 const LoginPage = () => {
+    const navigate = useNavigate();
     const { fetchData, data, loading, error } = useAxios();
     const [user, setUser] = useState('');
     const [password, setPassword] = useState('');
+    const { login } = useAuth();
 
     const handleUserChange = (e) => setUser(e.target.value);
     const handlePasswordChange = (e) => setPassword(e.target.value);
@@ -18,9 +22,11 @@ const LoginPage = () => {
         } else {
             if (data && !loading) {
                 toast.success('Inicio de Sesión Exitoso');
+                login(data);
+                navigate('/list_users');
             }
         }
-    }, [data, loading, error,]);
+    }, [data, loading, error, navigate, login]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
