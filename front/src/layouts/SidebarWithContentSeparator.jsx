@@ -21,8 +21,10 @@ import {
 } from "@heroicons/react/24/solid";
 import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/AuthContext";
 
 export default function SidebarWithContentSeparator() {
+    const { logout } = useAuth();
     const navigate = useNavigate();
     const [open, setOpen] = React.useState(0);
 
@@ -95,7 +97,7 @@ export default function SidebarWithContentSeparator() {
                 </ListItem>
                 <ListItem
                     onClick={() => {
-                        localStorage.removeItem("token");
+                        logout();
                         navigate("/login");
                     }}>
                     <ListItemPrefix>
