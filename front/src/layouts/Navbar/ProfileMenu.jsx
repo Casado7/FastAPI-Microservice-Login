@@ -13,9 +13,11 @@ import {
   ChevronDownIcon,
 } from "@heroicons/react/24/solid";
 import { PowerIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 
 
 export default function ProfileMenu() {
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const closeMenu = () => setIsMenuOpen(false);
@@ -23,10 +25,15 @@ export default function ProfileMenu() {
     {
       label: "My Profile",
       icon: UserCircleIcon,
+      onClick: () => navigate("/profile"),
     },
     {
       label: "Sign Out",
       icon: PowerIcon,
+      onClick: () => {
+        localStorage.removeItem("token");
+        navigate("/login");
+      },
     },
   ];
   
@@ -55,11 +62,11 @@ export default function ProfileMenu() {
         </Button>
       </MenuHandler>
       <MenuList className="p-1">
-        {profileMenuItems.map(({ label, icon }, key) => {
+        {profileMenuItems.map(({ label, icon, onClick }, key) => {
           return (
             <MenuItem
               key={label}
-              onClick={closeMenu}
+              onClick={onClick} // Add onClick here
               className="flex items-center gap-2 rounded"
             >
               {React.createElement(icon, {
