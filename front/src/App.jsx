@@ -13,9 +13,7 @@ function App() {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (user) {
-      navigate("/list_users");
-    } else {
+    if (!user) {
       navigate('/login');
     }
   }, [navigate, user]);
