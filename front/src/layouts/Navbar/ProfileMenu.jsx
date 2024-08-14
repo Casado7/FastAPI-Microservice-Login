@@ -14,9 +14,11 @@ import {
 } from "@heroicons/react/24/solid";
 import { PowerIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../auth/AuthContext";
 
 
 export default function ProfileMenu() {
+  const { logout } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
@@ -31,7 +33,7 @@ export default function ProfileMenu() {
       label: "Sign Out",
       icon: PowerIcon,
       onClick: () => {
-        localStorage.removeItem("token");
+        logout();
         navigate("/login");
       },
     },
